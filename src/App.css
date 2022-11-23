@@ -32,9 +32,14 @@
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    background-color: #999;
 }
 
+.grid {
+    width: 430px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
 
 
 
@@ -60,5 +65,9 @@
     .grid-area {
         justify-content: center;
         margin: 0 20px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }

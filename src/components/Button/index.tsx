@@ -3,12 +3,12 @@ import '../Button/styles.css';
 type Props = {
     label: string;
     icon?: any;
-    onClick: React.MouseEventHandler<HTMLDivElement>;
+    onClickProp: React.MouseEventHandler<HTMLDivElement>;
 };
 
-export const Button = ({ label, icon, onClick }: Props) => {
+export const Button = ({ label, icon, onClickProp }: Props) => {
     return (
-        <div className='container-button' onClick={onClick}>
+        <div className='container-button' onClick={onClickProp}>
             {icon &&
                 <div className='icon-area'>
                     <img src={icon} alt="" className='icon' />
