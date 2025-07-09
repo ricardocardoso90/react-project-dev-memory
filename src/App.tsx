@@ -1,16 +1,17 @@
-import './App.css';
-import { useState, useEffect } from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import "./App.css";
+import { useState, useEffect } from "react";
 
-import { Button } from './components/Button';
-import { InfoItem } from './components/InfoItem';
-import { GridItem } from './components/GridItem';
+import { items } from "./data/items";
+import { GridItemType } from "./Types";
+import { formatTimeElapsed } from "./helpers";
 
-import { GridItemType } from './Types';
-import { items } from './data/items';
+import logoRestart from "./svgs/restart.svg";
+import logoImage from "./assets/devmemory_logo.png";
 
-import logoImage from './assets/devmemory_logo.png';
-import logoRestart from './svgs/restart.svg';
-import { formatTimeElapsed } from './helpers';
+import { Button } from "./components/button";
+import { InfoItem } from "./components/infoItem";
+import { GridItem } from "./components/gridItem";
 
 const App = () => {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -35,18 +36,18 @@ const App = () => {
   useEffect(() => {
     if (shownCount === 2) {
       const opened = gridItems.filter((item) => {
-        return (item.shown === true);
+        return item.shown === true;
       });
+      
       if (opened.length === 2) {
-
         if (opened[0].item === opened[1].item) {
           const tmpGrid = [...gridItems];
           for (let i in tmpGrid) {
             if (tmpGrid[i].shown) {
               tmpGrid[i].permanentShown = true;
               tmpGrid[i].shown = false;
-            };
-          };
+            }
+          }
           setGridItems(tmpGrid);
           setShownCount(0);
         } else {
@@ -54,24 +55,26 @@ const App = () => {
             const tmpGrid = [...gridItems];
             for (let i in tmpGrid) {
               tmpGrid[i].shown = false;
-            };
+            }
             setGridItems(tmpGrid);
             setShownCount(0);
           }, 1000);
-        };
-
+        }
 
         setMoveCount((moveCount) => {
-          return (moveCount + 1);
-        })
-      };
-    };
+          return moveCount + 1;
+        });
+      }
+    }
   }, [shownCount, gridItems]);
 
   useEffect(() => {
-    if (moveCount > 0 && gridItems.every((item) => item.permanentShown === true)) {
+    if (
+      moveCount > 0 &&
+      gridItems.every((item) => item.permanentShown === true)
+    ) {
       setPlaying(false);
-    };
+    }
   }, [moveCount, gridItems]);
 
   const resetAndCreateGrid = () => {
@@ -83,13 +86,13 @@ const App = () => {
     // Passo 2: Criar o Grid.
     // 2.1: Criar um Grid vazio.
     const tempGrid: GridItemType[] = [];
-    for (let i = 0; i < (items.length * 2); i++) {
+    for (let i = 0; i < items.length * 2; i++) {
       tempGrid.push({
         item: null,
         shown: false,
-        permanentShown: false
+        permanentShown: false,
       });
-    };
+    }
 
     // 2.2: Preencher o Grid.
     for (let w = 0; w < 2; w++) {
@@ -97,10 +100,10 @@ const App = () => {
         let pos = -1;
         while (pos < 0 || tempGrid[pos].item !== null) {
           pos = Math.floor(Math.random() * (items.length * 2));
-        };
+        }
         tempGrid[pos].item = i;
-      };
-    };
+      }
+    }
 
     // 2.3: Jogar no State.
     setGridItems(tempGrid);
@@ -111,37 +114,40 @@ const App = () => {
 
   const handleItemClick = (index: number) => {
     if (playing && index !== null && shownCount < 2) {
-      const tmpGrid = [...gridItems]
-      if (tmpGrid[index].permanentShown === false && tmpGrid[index].shown === false) {
+      const tmpGrid = [...gridItems];
+      if (
+        tmpGrid[index].permanentShown === false &&
+        tmpGrid[index].shown === false
+      ) {
         tmpGrid[index].shown = true;
         setShownCount(shownCount + 1);
-      };
+      }
 
       setGridItems(tmpGrid);
-    };
+    }
   };
 
   return (
-    <div className='container'>
-
-      <div className='info'>
-        <a href="#" className='logo-link'>
+    <div className="container">
+      <div className="info">
+        <a href="#" className="logo-link">
           <img src={logoImage} width={200} alt="" />
         </a>
 
-        <div className='info-area'>
-          <InfoItem label='Tempo' value={formatTimeElapsed(timeElapsed)} />
-          <InfoItem label='Movimentos' value={moveCount.toString()} />
+        <div className="info-area">
+          <InfoItem label="Tempo" value={formatTimeElapsed(timeElapsed)} />
+          <InfoItem label="Movimentos" value={moveCount.toString()} />
         </div>
 
         <Button
-          label='Reiniciar'
+          label="Reiniciar"
           icon={logoRestart}
-          onClickProp={resetAndCreateGrid} />
+          onClickProp={resetAndCreateGrid}
+        />
       </div>
 
-      <div className='grid-area'>
-        <div className='grid'>
+      <div className="grid-area">
+        <div className="grid">
           {gridItems.map((item, index) => {
             return (
               <GridItem
@@ -149,13 +155,12 @@ const App = () => {
                 itemProp={item}
                 onClickProp={() => handleItemClick(index)}
               />
-            )
+            );
           })}
         </div>
       </div>
-
     </div>
-  )
+  );
 };
 
 export default App;
